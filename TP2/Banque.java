@@ -4,8 +4,9 @@ public class Banque {
   
 	static Connection conn;
 
+	//ssh monnetpa@im2ag-oracle.e.ujf-grenoble.fr
 	static final String CONN_URL = "jdbc:oracle:thin:@im2ag-oracle.e.ujf-grenoble.fr:1521:ufrima";
-	static final String USER = "thebauda";
+	static final String USER = "monnetpa";
 	static final String PASSWD = "bd2015";
 
 	public static final String COLOR_ON = "\u001B[31m";
@@ -75,6 +76,7 @@ public class Banque {
 		Statement stmt = conn.createStatement();
 
 		try  {
+			//UPDATE LesAnimaux SET NB_MALADIES = 2 WHERE nomA = 'Milou';
 			stmt.executeUpdate("UPDATE LesAnimaux SET nocage = " + numCage + " WHERE nomA = '" + animal+"'");
 			listeAnimaux();
 		} catch (SQLException e) {
@@ -91,6 +93,7 @@ public class Banque {
 		System.out.println("Ajouter quelle maladie à "+animal+" ?");
 		String maladie = LectureClavier.lireChaine();
 		try  {
+			//INSERT INTO LesMaladies VALUES ('Milou', 'varicelle');
 			stmt.executeUpdate("INSERT INTO LesMaladies VALUES ('"+ animal +"', '"+ maladie +"')");
 			listeAnimaux();
 		} catch (SQLException e) {
@@ -111,7 +114,7 @@ public class Banque {
 	}   
 
 	private static void getIsolation() throws SQLException {
-		int conn.getIsolation
+		//int conn.getIsolation
 	}
 
 	private static void setIsolation() throws SQLException {
