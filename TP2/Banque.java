@@ -4,7 +4,8 @@ public class Banque {
   
 	static Connection conn;
 
-	static final String CONN_URL = "jdbc:oracle:thin:@im2ag-oracle.e.ujf-grenoble.fr:1521:ufrima";
+	//static final String CONN_URL = "jdbc:oracle:thin:@im2ag-oracle.e.ujf-grenoble.fr:1521:ufrima";
+	static final String CONN_URL = "jdbc:oracle:thin:@192.168.0.12:1521";
 	static final String USER = "thebauda";
 	static final String PASSWD = "bd2015";
 
