@@ -11,12 +11,24 @@ public class Banque {
 	public static final String COLOR_ON = "\u001B[31m";
 	public static final String COLOR_OFF = "\u001B[0m";
 
+	private static void displayError(SQLException e) {
+		System.err.println("failed");
+		System.out.println("Affichage de la pile d'erreur");
+		e.printStackTrace(System.err);
+		System.out.println("Affichage du message d'erreur");
+		System.out.println(e.getMessage());
+		System.out.println("Affichage du code d'erreur");
+		System.out.println(e.getErrorCode());
+	}
+
 	private static void menu() {
 		System.out.println("*** Choisir une action a effectuer : ***");
 		System.out.println("0 : Quitter");
 		System.out.println("1 : Afficher la liste des animaux");
 		System.out.println("2 : Deplacer un animal de cage");
 		System.out.println("3 : Ajouter une maladie");
+		System.out.println("4 : Valider la transaction");
+		System.out.println("5 : Effectuer un Rollback");
 	}
 
 	private static void listeAnimaux() throws SQLException {
@@ -62,27 +74,44 @@ public class Banque {
 		int numCage = LectureClavier.lireEntier("Dans quelle cage ?");
 		Statement stmt = conn.createStatement();
 
-		if (stmt.executeUpdate("UPDATE LesAnimaux SET nocage = " + numCage + " WHERE nomA = " + animal) == 0) {
+		try  {
+			stmt.executeUpdate("UPDATE LesAnimaux SET nocage = " + numCage + " WHERE nomA = '" + animal+"'");
+			listeAnimaux();
+		} catch (SQLException e) {
 			System.out.println("La mise à jour a échoué");
+			displayError(e);    
 		}
 	} 
 
 	private static void ajouterMaladie() throws SQLException {
-		// A COMPLETER
+		Statement stmt = conn.createStatement();
+		listeAnimaux();
+		System.out.println("Ajouter une maladie à qui ?");
+		String animal = LectureClavier.lireChaine();
+		System.out.println("Ajouter quelle maladie à "+animal+" ?");
+		String maladie = LectureClavier.lireChaine();
+		try  {
+			stmt.executeUpdate("INSERT INTO LesMaladies VALUES ('"+ animal +"', '"+ maladie +"')");
+			listeAnimaux();
+		} catch (SQLException e) {
+			System.out.println("L'insertion a échoué");
+			displayError(e);
+		}
 	}   
 
 
 	private static void commit() throws SQLException {
-		// A COMPLETER0
-
+		conn.commit();
+		System.out.println("Commit effectué");
 	}       
 
 	private static void rollback() throws SQLException {
-		// A COMPLETER
+		conn.rollback();
+		System.out.println("Rollback effectué");
 	}   
 
 	private static void getIsolation() throws SQLException {
-		// A COMPLETER
+		int conn.getIsolation
 	}
 
 	private static void setIsolation() throws SQLException {
@@ -117,6 +146,8 @@ public class Banque {
 		        case 1 : listeAnimaux(); break;
 		        case 2 : deplacerAnimal(); break;
 		        case 3 : ajouterMaladie(); break;
+		        case 4 : commit(); break;
+		        case 5 : rollback(); break;
 		        default : System.out.println("=> choix incorrect"); menu();
 		      }
 		    }       
@@ -127,13 +158,7 @@ public class Banque {
 	    
 		// traitement d'exception
 		} catch (SQLException e) {
-			System.err.println("failed");
-			System.out.println("Affichage de la pile d'erreur");
-			e.printStackTrace(System.err);
-			System.out.println("Affichage du message d'erreur");
-			System.out.println(e.getMessage());
-			System.out.println("Affichage du code d'erreur");
-			System.out.println(e.getErrorCode());     
+			displayError(e);    
 		}
 	}
 
