@@ -1,3 +1,0 @@
-javac -classpath .:./mysql-connector-java-5.1.37-bin.jar Banque_mysql.java
-
-
